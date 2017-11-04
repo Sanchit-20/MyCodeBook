@@ -1,0 +1,13 @@
+void dfs(int src){
+    vis[src]=1;
+    start[src]=k;
+    yo[k++]=src;
+    list<int>::iterator it;
+    for(it=adj[src].begin();it!=adj[src].end();it++){
+        if(!vis[*it]){
+            dfs(*it);
+        }
+    }
+    en[src]=k;
+    yo[k++]=src;
+}
