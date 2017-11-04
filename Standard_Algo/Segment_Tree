@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <fstream>
+#include <string.h>
+#include <cctype>
+#include <list>
+#include <vector>
+#include <cstdlib>
+#include <stack>
+#include <cmath>
+#include <limits.h>
+#include <math.h>
+#include <map>
+#include <deque>
+#include <queue>
+#include <utility>
+#include <set>
+#define xfor(i,start,end) for(ll i=start;i<end;i++)
+#define rfor(i,end,start) for(int i=end-1;i>=start;i--)
+#define scan(x) scanf("%d",&x)
+#define print(x) printf("%d ",x)
+#define init(x) memset(x,0,sizeof(x))
+#define pb push_back
+#define pf pop_front
+#define mp make_pair
+#define f first
+#define s second
+#define ull unsigned long long
+#define PI 3.141592654
+typedef long long ll;
+const ll INF=ll(1e18);
+const int MOD=1e9+7;
+using namespace std;
+ 
+list<int> adj[100001];
+int t[1000001],num;
+
+void build() { //sum build
+    for (int i = num - 1; i > 0; --i){
+        t[i] = t[i<<1] + t[i<<1|1];
+    }
+}
+
+void update(int p, int value) {  //at position p=>value
+  for (t[p += num] = value; p > 1; p >>= 1) t[p>>1] = t[p] + t[p^1];
+}
+
+int query(int l, int r) {  //range [l , r)
+  int res = 0;
+  for (l += num, r += num; l < r; l >>= 1, r >>= 1) {
+    if (l&1){
+        res += t[l++];
+    }
+    if (r&1){
+        res += t[--r];
+    }
+  }
+  return res;
+}
+
+
+int main(){
+    std::ios_base::sync_with_stdio(false);
+    //freopen("/Users/Rahul/Desktop/B-large-practice.in","r",stdin);
+    int n,m,u,v;
+    cin>>n>>m;
+    num=2*n;
+    for(int i=0;i<num;i++){
+        cin>>t[i+num];
+    }
+    build();
+    char ch;
+    for(int i=0;i<m;i++){
+        cin>>ch;
+        if(ch=='Q'){
+            cin>>u;
+            u--;
+            cout<<(query(start[u],en[u]+1))/2<<endl;
+        }
+        else{
+            cin>>u>>v;
+            u--;
+            update(start[u],v);
+            update(en[u],v);
+        }
+    }
+    return 0;
+} 
